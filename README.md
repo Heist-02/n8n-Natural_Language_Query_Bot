@@ -23,7 +23,7 @@ This workflow enables natural-language querying of a PostgreSQL database using a
 **1.	n8n : **
 ```●	Open source workflow automation tool. 
 ●	It uses docker to run locally on Port : 5678
-●	The building platform UI can be found at: http://localhost:5678/```
+●	The building platform UI can be found at: http://localhost:5678/```</code>
 
 **2.	Postgres : **
 <code>```●	Used keep the Database up and running
