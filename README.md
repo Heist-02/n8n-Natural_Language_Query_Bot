@@ -6,6 +6,7 @@ This workflow enables natural-language querying of a PostgreSQL database using a
 
 
 **Use Cases**
+
 ●	Answering questions like:
 
 	• “How many tickets did we sell?”
