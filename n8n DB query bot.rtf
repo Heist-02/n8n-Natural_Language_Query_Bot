@@ -1,0 +1,215 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2822
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 \{\
+  "nodes": [\
+    \{\
+      "parameters": \{\
+        "options": \{\
+          "systemMessage": "You are a smart PostgreSQL database assistant.\\n\\nYour job is to answer the user's natural-language questions using the connected database. You MUST interact with the database ONLY by using the tools provided after the user asks a question. You MUST always issue tool calls in the correct sequence below before answering.\\n\\n---\\n\\n## TOOL USAGE RULES\\n\\n1. First, use \\"Get DB Schema and Tables List\\" to discover available tables and schemas.\\n2. Then, use \\"Get Table Definition\\" to inspect column names and types.\\n3. Then, use \\"Execute SQL query\\" to run queries and get answers.\\n4. You may run multiple queries and combine results before answering.\\n\\n---\\n\\n## BEHAVIOR RULES\\n\\n- DO NOT ask the user for table names, column names, or schema info or any other followup information. Figure it out yourself.\\n- DO NOT say \'93I need more information.\'94 Explore and make your best guess.\\n- DO NOT expose internal thoughts or tool steps unless explicitly asked.\\n- DO NOT assume schema structure \'97 always check using the tools.\\n\\n- When answering:\\n  - Give direct, helpful natural-language responses.\\n  - Always use schema-qualified names like public.\\"Ticket\\" in queries.\\n  - If the user asks something like \'93how did you get this number?\'94, \'93show the query\'94, or \'93what was the SQL?\'94, THEN provide the SQL query you used.\\n  - Otherwise, DO NOT include raw SQL in your answer by default.\\n\\n- You may summarize, filter, group, or aggregate as needed to compute results.\\n\\nYou are a helpful database analyst, not a code generator. Be smart, clear, and concise \'97 and include the SQL only when explicitly requested.\\n"\
+        \}\
+      \},\
+      "type": "@n8n/n8n-nodes-langchain.agent",\
+      "typeVersion": 2,\
+      "position": [\
+        120,\
+        0\
+      ],\
+      "id": "6c5b8953-38cb-443b-b29a-444ae0be1e30",\
+      "name": "AI Agent"\
+    \},\
+    \{\
+      "parameters": \{\
+        "modelName": "models/gemini-2.5-pro",\
+        "options": \{\
+          "temperature": 0.2\
+        \}\
+      \},\
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",\
+      "typeVersion": 1,\
+      "position": [\
+        -40,\
+        220\
+      ],\
+      "id": "9726ba86-884b-4cfe-b81e-9c829efd1ece",\
+      "name": "Google Gemini Chat Model",\
+      "credentials": \{\
+        "googlePalmApi": \{\
+          "id": "A3FBL95vpXXnorv5",\
+          "name": "Google Gemini(PaLM) Api account"\
+        \}\
+      \}\
+    \},\
+    \{\
+      "parameters": \{\
+        "options": \{\}\
+      \},\
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",\
+      "typeVersion": 1.1,\
+      "position": [\
+        -80,\
+        0\
+      ],\
+      "id": "3203e4ac-51e4-4c57-b3f4-50ecae0246f9",\
+      "name": "When chat message received",\
+      "webhookId": "aa0b2679-95ec-4bc4-a7bd-21370dd8c3dc"\
+    \},\
+    \{\
+      "parameters": \{\},\
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",\
+      "typeVersion": 1.3,\
+      "position": [\
+        80,\
+        220\
+      ],\
+      "id": "5e0a83d6-6625-4885-9bf0-656b4816609f",\
+      "name": "Simple Memory"\
+    \},\
+    \{\
+      "parameters": \{\
+        "descriptionType": "manual",\
+        "toolDescription": "Get all the data from Postgres, make sure you append the tables with correct schema. Every table is associated with some schema in the database.",\
+        "operation": "executeQuery",\
+        "query": "\{\{ $fromAI(\\"sql_query\\", \\"SQL Query\\") \}\}",\
+        "options": \{\}\
+      \},\
+      "id": "ab72a04e-84c4-4309-be28-77dbb060ac45",\
+      "name": "Execute SQL Query",\
+      "type": "n8n-nodes-base.postgresTool",\
+      "position": [\
+        420,\
+        220\
+      ],\
+      "typeVersion": 2.5,\
+      "credentials": \{\
+        "postgres": \{\
+          "id": "m1FeZjDa4PfPGqy4",\
+          "name": "fennecdb"\
+        \}\
+      \}\
+    \},\
+    \{\
+      "parameters": \{\
+        "descriptionType": "manual",\
+        "toolDescription": "Get list of all tables with their schema in the database",\
+        "operation": "executeQuery",\
+        "query": "SELECT \\n    table_schema,\\n    table_name\\nFROM information_schema.tables\\nWHERE table_type = 'BASE TABLE'\\n    AND table_schema NOT IN ('pg_catalog', 'information_schema')\\nORDER BY table_schema, table_name;",\
+        "options": \{\}\
+      \},\
+      "id": "e088cdb1-cc79-4326-9e86-8ba298a53edb",\
+      "name": "Get DB Schema and Tables List",\
+      "type": "n8n-nodes-base.postgresTool",\
+      "position": [\
+        600,\
+        260\
+      ],\
+      "typeVersion": 2.5,\
+      "credentials": \{\
+        "postgres": \{\
+          "id": "m1FeZjDa4PfPGqy4",\
+          "name": "fennecdb"\
+        \}\
+      \}\
+    \},\
+    \{\
+      "parameters": \{\
+        "descriptionType": "manual",\
+        "toolDescription": "Get table definition to find all columns and types",\
+        "operation": "executeQuery",\
+        "query": "select\\n  c.column_name,\\n  c.data_type,\\n  c.is_nullable,\\n  c.column_default,\\n  tc.constraint_type,\\n  ccu.table_name AS referenced_table,\\n  ccu.column_name AS referenced_column\\nfrom\\n  information_schema.columns c\\nLEFT join\\n  information_schema.key_column_usage kcu\\n  ON c.table_name = kcu.table_name\\n  AND c.column_name = kcu.column_name\\nLEFT join\\n  information_schema.table_constraints tc\\n  ON kcu.constraint_name = tc.constraint_name\\n  AND tc.constraint_type = 'FOREIGN KEY'\\nLEFT join\\n  information_schema.constraint_column_usage ccu\\n  ON tc.constraint_name = ccu.constraint_name\\nwhere\\n  c.table_name = '\{\{ $fromAI(\\"table_name\\") \}\}'\\n  AND c.table_schema = '\{\{ $fromAI(\\"schema_name\\") \}\}'\\norder by\\n  c.ordinal_position",\
+        "options": \{\}\
+      \},\
+      "id": "e98e69c4-890d-4603-8930-f1bba6c0729b",\
+      "name": "Get Table Definition",\
+      "type": "n8n-nodes-base.postgresTool",\
+      "position": [\
+        800,\
+        280\
+      ],\
+      "typeVersion": 2.5,\
+      "credentials": \{\
+        "postgres": \{\
+          "id": "m1FeZjDa4PfPGqy4",\
+          "name": "fennecdb"\
+        \}\
+      \}\
+    \}\
+  ],\
+  "connections": \{\
+    "Google Gemini Chat Model": \{\
+      "ai_languageModel": [\
+        [\
+          \{\
+            "node": "AI Agent",\
+            "type": "ai_languageModel",\
+            "index": 0\
+          \}\
+        ]\
+      ]\
+    \},\
+    "When chat message received": \{\
+      "main": [\
+        [\
+          \{\
+            "node": "AI Agent",\
+            "type": "main",\
+            "index": 0\
+          \}\
+        ]\
+      ]\
+    \},\
+    "Simple Memory": \{\
+      "ai_memory": [\
+        [\
+          \{\
+            "node": "AI Agent",\
+            "type": "ai_memory",\
+            "index": 0\
+          \}\
+        ]\
+      ]\
+    \},\
+    "Execute SQL Query": \{\
+      "ai_tool": [\
+        [\
+          \{\
+            "node": "AI Agent",\
+            "type": "ai_tool",\
+            "index": 0\
+          \}\
+        ]\
+      ]\
+    \},\
+    "Get DB Schema and Tables List": \{\
+      "ai_tool": [\
+        [\
+          \{\
+            "node": "AI Agent",\
+            "type": "ai_tool",\
+            "index": 0\
+          \}\
+        ]\
+      ]\
+    \},\
+    "Get Table Definition": \{\
+      "ai_tool": [\
+        [\
+          \{\
+            "node": "AI Agent",\
+            "type": "ai_tool",\
+            "index": 0\
+          \}\
+        ]\
+      ]\
+    \}\
+  \},\
+  "pinData": \{\},\
+  "meta": \{\
+    "templateCredsSetupCompleted": true,\
+    "instanceId": "10fdbc7cbbd1ef131085aafbdba7e64357d130fb29c3c5679a2ae8700cbe63bd"\
+  \}\
+\}}
