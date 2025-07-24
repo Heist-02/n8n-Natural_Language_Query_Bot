@@ -21,9 +21,9 @@ This workflow enables natural-language querying of a PostgreSQL database using a
 **These are the tools used to build the query bot : **
 
 **1.	n8n : **
-<pre>```●	Open source workflow automation tool. 
+```●	Open source workflow automation tool. 
 ●	It uses docker to run locally on Port : 5678
-●	The building platform UI can be found at: http://localhost:5678/```</pre> 
+●	The building platform UI can be found at: http://localhost:5678/```
 
 **2.	Postgres : **
 <code>```●	Used keep the Database up and running
