@@ -21,21 +21,21 @@ This workflow enables natural-language querying of a PostgreSQL database using a
 **These are the tools used to build the query bot : **
 
 **1.	n8n : **
-```●	Open source workflow automation tool. 
-●	It uses docker to run locally on Port : 5678
-●	The building platform UI can be found at: http://localhost:5678/```</code>
+	Open source workflow automation tool. 
+	It uses docker to run locally on Port : 5678
+	The building platform UI can be found at: </code>```http://localhost:5678/```</code>
 
 **2.	Postgres : **
-<code>```●	Used keep the Database up and running
-●	It uses docker to run locally on Port : 5432```</code> 
+●	Used keep the Database up and running
+●	It uses docker to run locally on Port : 5432
 
 **3.	Google Gemini : **
-<code>```●	Used as the main LLM (Can be swapped to other models as well)
+●	Used as the main LLM (Can be swapped to other models as well)
 ●	An API key using AI studio currently running on their free tier
 ●	Recommended gemini model : models/gemini-2.5-pro
-●	Other workable models : models/gemini-2.5-flash , models/gemini-2.0-pro-exp , models/gemini-2.0-flash , models/gemini-1.5-pro-latest ,  models/gemini-1.5-pro. (All of these have varying degrees of success)```</code> 
+●	Other workable models : models/gemini-2.5-flash , models/gemini-2.0-pro-exp , models/gemini-2.0-flash , models/gemini-1.5-pro-latest ,  models/gemini-1.5-pro. (All of these have varying degrees of success)
 
 **4.	Memory Buffer : **
-<code>```●	Currently using a local n8n simple memory storage tool for ease of use. 
-●	Other compatible tools include : MongoDB Chat memory , Motorhead , Postgres Chat memory , Redis chat memory , Xta , Ze ```</code> 
+●	Currently using a local n8n simple memory storage tool for ease of use. 
+●	Other compatible tools include : MongoDB Chat memory , Motorhead , Postgres Chat memory , Redis chat memory , Xta , Ze
 
